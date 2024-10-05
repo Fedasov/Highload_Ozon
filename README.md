@@ -233,6 +233,10 @@ Ozon работает в несккольких странах, поэтому �
 
 В таком случае, исходя из пикового RPS по всем основным ручкам (4390 RPS) получаем, что на обработку SSL каждую секунду потребуется 4390 * 3 = 13 170 мс = 13 секунд вычислительного времени.
 
+# 5. Логическая схема БД
+
+<iframe width="100%" height="500px" style="box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); border-radius:15px;" allowtransparency="true" allowfullscreen="true" scrolling="no" title="Embedded DrawSQL IFrame" frameborder="0" src="https://drawsql.app/teams/sergey-20/diagrams/highload-ozon-db/embed"></iframe>
+
 # Список источников
 
 1. https://pro.similarweb.com/#/digitalsuite/websiteanalysis/overview/website-performance/*/999/1m?webSource=Total&key=ozon.ru
