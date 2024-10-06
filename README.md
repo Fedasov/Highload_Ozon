@@ -236,7 +236,84 @@ Ozon работает в несккольких странах, поэтому �
 
 # 5. Логическая схема БД
 
-[![DB Highload_Ozon](https://drawsql.app/teams/sergey-20/diagrams/highload-ozon-db/embed)](https://drawsql.app/teams/sergey-20/diagrams/highload-ozon-db/embed)
+![drawSQL-image-export-2024-10-05 (1).png](images/drawSQL-image-export-2024-10-05%20%281%29.png)
+<br/>Вы можете перейти по ссылке чтобы подробнее изучить схему бд: https://drawsql.app/teams/sergey-20/diagrams/highload-ozon-db
+
+| Type     | Byte size   |
+|----------|-------------|
+| UUID     | 16          |
+| INT      | 4           |
+| SMALLINT | 2           |
+| DATE     | 8           |
+| DECIMAL  | [5, 17]     |
+| TEXT     | [0, 65 535] |
+
+**Profile_Public**
+```
+  id(16) + name(32) + surname(64) + photo_profile(64) + profile_id(16) = 192
+``` 
+
+**Profile_Private**
+```
+  id(16) + phone_number(19) + email(32) + gender(2) + date_of_birth(8) + password_hash(64) + date_creating_profile(8) = 149
+``` 
+
+**Comment**
+```
+  id(16) + profile_id(16) + product_id(16) + comment(256) + rating(2) + photo(64) = 370
+  id(16) + profile_id(16) + product_id(16) + comment() + rating(2) + photo() = 50
+``` 
+
+**Product**
+```
+  id(16) + title(128) + description(1024) + producr_size(4) + amount(4) + price(10) + imgsrc(16) + category(16) = 1 218
+``` 
+
+**Category**
+```
+  id(16) + title(64) = 80
+``` 
+
+**File_Product**
+```
+  id(16) + product_id(16) + imgsrc(64) = 96
+``` 
+
+**Shopping_Cart**
+```
+  id(16) + profile_id(16) + product_id(16) + cost(10) = 58
+``` 
+
+**Order_Item**
+```
+  id(16) + profile_id(16) + product_id(16) + date_start(8) + date_finish(8) + price(10) + quantity(4) + address(16) + status(256) + track_number(64) = 414
+``` 
+
+**List_Pick-up**
+```
+  id(16) + city(16) + street(16) + house(16) = 64
+``` 
+
+* Согласно источникам [[17]](https://vc.ru/u/2023081-slava-gavrilenko/778277-kak-chasto-klienty-ostavlyayut-otzyvy-na-marketpleisah-ozon-wildberries) около 15% молча поставят оценку, 9% всегда пишут отзывы с целью помочь другим а 6% еще и фотографией поделятся. Будем считать что 7% пишут отзыв с фотографией.
+* Так как в год заказывают около 966 млн. товаров, то в месяц заказывают около 80.5 млн. (комментарий к товару может оставить только заказчик)
+* Так как в среднем на добавление товара продавцом выходит 0.5 RPS то в месяц выкладывается около 0.5 * 60 * 60 * 24 * 30 = 1.3 млн. товаров
+* В ozon насчитывается 24 товарных раздела [[18]](https://betapro.ru/blog/Marketplejs-Ozon-instrumenty-poiska-tovarnoj-kategorii/#:~:text=Маркетплейсы%20позиционируют%20себя%20как%20универсальные,февраля»%2C%20«8%20марта»%20и%20др)
+* Товар в корзине на Ozon хранится 30 дней. После этого срока товар пропадёт из корзины. [[19]](https://telegra.ph/Skolko-mozhet-lezhat-tovar-v-korzine-na-ozon-Vse-chto-nuzhno-znat-o-srokah-hraneniya-tovarov-na-Ozon-ot-korziny-do-punkta-vydach-08-28). Будем считать что товар хранится в корзине 14 дней
+* В среднем доставка заказа со склада Ozon занимает до 4 рабочих дней.
+* По данным на конец первого квартала 2024 года, в России было 16 тысяч пунктов выдачи заказов и постаматов, брендированных Ozon.[[20]](https://www.retail.ru/news/ozon-i-wildberries-uvelichili-chislo-pvz-na-23-i-67-za-god-13-dekabrya-2022-223746/)
+
+| Table               | Row size [byte] | Number of row                                      | Total          |
+|---------------------|-----------------|----------------------------------------------------|----------------|
+| **Profile_Public**  | 192             | 58.6 * 10^6 (MAU)                                  | 10.5 Гб        |
+| **Profile_Private** | 149             | 58.6 * 10^6 (MAU)                                  | 8.13 Гб        |
+| **Comment**         | 370; 50         | 80.5 * 10^6 (MAU) * 0,07; 80.5 * 10^6 (MAU) * 0,15 | 2 Гб; 575,8 Мб |
+| **Product**         | 1218            | 1.3 * 10^6 (MAU)                                   | 1,47 Гб        |
+| **Category**        | 80              | 24                                                 | 1,88 Кб        |
+| **File_Product**    | 96              | 1.3 * 10^6 (MAU) * 7                               | 0,8 Гб         |
+| **Shopping_Cart**   | 58              | 3.1 * 21 * 10^6 (DAU) * 14                         | 49 Гб          |
+| **Order_Item**      | 414             | 966 * 10^6 / 365 * 4 дня                           | 4,1 Гб         |
+| **List_Pick-up**    | 64              | 16 000                                             | 1 000 Кб       |
+
 
 # Список источников
 
@@ -256,3 +333,7 @@ Ozon работает в несккольких странах, поэтому �
 14. https://habr.com/ru/companies/vk/articles/347026/
 15. https://timeweb.cloud/tutorials/servers/kak-nastroit-balansirovku-nagruzki-s-pomoshchyu-nginx
 16. https://www.ibm.com/docs/en/cics-ts/6.x?topic=performance-ssl-handshake-overhead
+17. https://vc.ru/u/2023081-slava-gavrilenko/778277-kak-chasto-klienty-ostavlyayut-otzyvy-na-marketpleisah-ozon-wildberries
+18. https://betapro.ru/blog/Marketplejs-Ozon-instrumenty-poiska-tovarnoj-kategorii/#:~:text=Маркетплейсы%20позиционируют%20себя%20как%20универсальные,февраля»%2C%20«8%20марта»%20и%20др
+19. https://telegra.ph/Skolko-mozhet-lezhat-tovar-v-korzine-na-ozon-Vse-chto-nuzhno-znat-o-srokah-hraneniya-tovarov-na-Ozon-ot-korziny-do-punkta-vydach-08-28
+20. https://www.retail.ru/news/ozon-i-wildberries-uvelichili-chislo-pvz-na-23-i-67-za-god-13-dekabrya-2022-223746/
