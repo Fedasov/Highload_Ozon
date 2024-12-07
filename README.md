@@ -654,16 +654,16 @@ Network  |	40 ГБит/с
 
 | Сервис                   | RPS    | CPU | RAM    | Net            |
 |--------------------------|--------|-----|--------|----------------|
-| Session                  | 6 030  | 121 | 10 Gb  | 1 Gbit/s       |
+| Session                  | 6030  | 121 | 10 Gb  | 1 Gbit/s       |
 | Profile                  | 4      | 1   | 10 Mb  | 1 Mbit/s       |
 | SallerProduct            | 486    | 10  | 500 Mb | 100 Mbit/s     |
-| Comment                  | 1 944  | 39  | 2 Gb   | 500 Mbit/s     |
-| ShoppingCart             | 3 111  | 63  | 3 Gb   | 1 Gbit/s       |
+| Comment                  | 1944  | 39  | 2 Gb   | 500 Mbit/s     |
+| ShoppingCart             | 3111  | 63  | 3 Gb   | 1 Gbit/s       |
 | OrderItem                | 738    | 15  | 700 Mb | 100 Mbit/s     |
-| Product                  | 11 668 | 234 | 11 Gb  | 2 Gbit/s       |
-| Search                   | 1 555  | 31  | 1.5 Gb | 500 Mbit/s     |
+| Product                  | 11668 | 234 | 11 Gb  | 2 Gbit/s       |
+| Search                   | 1555  | 31  | 1.5 Gb | 500 Mbit/s     |
 | AppIndever               | 486    | 10  | 500 Mb | 100 Mbit/s     |
-| ProxyServer Nginx&&Kafka | 25 280 | 506 | 25 Gb  | 5 Gbit/s       |
+| ProxyServer Nginx&&Kafka | 25280 | 506 | 25 Gb  | 5 Gbit/s       |
 
 
 ### Модель развертывания
